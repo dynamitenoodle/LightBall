@@ -5,13 +5,14 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour {
 
     // attributes
-    OrbScript orbScript;
+    GameObject orbScript;
     InputManagerScript inputManager;
 
 	// Use this for initialization
 	void Start ()
     {
-		
+        orbScript = GameObject.FindGameObjectWithTag("Orb");
+        inputManager = GameObject.Find("InputManager").GetComponent<InputManagerScript>();
 	}
 	
 	// Update is called once per frame

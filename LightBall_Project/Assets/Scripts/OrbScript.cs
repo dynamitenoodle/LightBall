@@ -6,15 +6,19 @@ public class OrbScript : Entity {
 
     // attributes
     GameObject player;
-	Vector3 heldPosition;
-	public bool isHeld;
-	bool canPickup;
-	int pickupTimer, pickupTimerMax;
-	Collider2D orbCol, orbCatchCol, playerCol;
-
+    Vector3 heldPosition;
+    public bool isHeld;
+    bool canPickup;
+    int pickupTimer, pickupTimerMax;
+    Collider2D orbCol, orbCatchCol, playerCol;
+    public bool Damage
+    {
+        get { return vel.magnitude > .06f; }
+    }
 	// Use this for initialization
 	void Start ()
     {
+        
         player = GameObject.FindGameObjectWithTag("Player");
 		heldPosition = player.transform.GetChild(0).gameObject.transform.position;
 		transform.position = heldPosition = new Vector3(heldPosition.x, heldPosition.y, transform.position.z); // sets the position of the orb and the held position with correct z positions
@@ -37,18 +41,31 @@ public class OrbScript : Entity {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-		// Check if the player is holding the orb
-		if (CheckHold())
-			pos = heldPosition;
-		// it isn't so slow down
-		else
-			vel *= .9f;
+        
+        // Check if the player is holding the orb
+        if (CheckHold())
+            pos = heldPosition;
+        // it isn't so slow down
+        else if (vel.magnitude < .01f)
+        {
+            vel = Vector3.zero;
+        }
+        else
+            vel *= .9f;
 
-		// If the orb can't be picked up yet
-		if (!canPickup)
+        // If the orb can't be picked up yet
+        if (Damage)
+        {
+            if (GetComponent<SpriteRenderer>().color != Color.red)
+                GetComponent<SpriteRenderer>().color = Color.red;
+        }
+        else if (GetComponent<SpriteRenderer>().color != Color.yellow)
+        {
+            GetComponent<SpriteRenderer>().color = Color.yellow;
+
+        }
+        if (!canPickup)
 		{
-			if (GetComponent<SpriteRenderer>().color != Color.red)
-				GetComponent<SpriteRenderer>().color = Color.red;
 
 			if (pickupTimer > pickupTimerMax)
 			{
@@ -57,11 +74,12 @@ public class OrbScript : Entity {
 			}
 			pickupTimer++;
 		}
-		else
-			if (GetComponent<SpriteRenderer>().color != Color.yellow)
-				GetComponent<SpriteRenderer>().color = Color.yellow;
+        else if (GetComponent<SpriteRenderer>().color != Color.green)
+        {
+            GetComponent<SpriteRenderer>().color = Color.green;
+        }
 
-		UpdatePosition();
+        UpdatePosition();
 	}
 
 	// Checks if we are holding the ball and if we should pick it up

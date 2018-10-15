@@ -10,6 +10,7 @@ public class EnemyScript : Entity {
     public float radius;
     public int speed = 1;
     public int health = 100;
+    Vector3 Target;
     Transform player;
     Vector3 home;
     public Vector3 direction;
@@ -23,6 +24,7 @@ public class EnemyScript : Entity {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         pos = transform.position;
         home = pos;
+        Target = home;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,7 @@ public class EnemyScript : Entity {
     {
         if(direction == Vector3.zero)
         direction = (player.position - transform.position).normalized;
-
+        if(Target == )
         if (health < 0)
         {
             Destroy(this.gameObject);
@@ -38,39 +40,39 @@ public class EnemyScript : Entity {
         
        
             hitInfo = NOTCOLLIDING;
-
+        float sqm = (player.position - transform.position).sqrMagnitude;
 
         if (GetComponent<SpriteRenderer>().isVisible) {
-            if (Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
+            if (Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist && sqm<sightDist*sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position, player.position - transform.position);
             }
-            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position);
             }
 
-            else if (Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position);
             }
-            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist))
+            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist) && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position, -transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist && sqm < sightDist * sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, -transform.right);
             }
-            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
+            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
             {
 
                 Vector3 dir1 = new Vector3(hitInfo.normal.y, hitInfo.normal.x).normalized;

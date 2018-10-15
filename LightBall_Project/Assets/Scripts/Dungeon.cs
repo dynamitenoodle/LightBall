@@ -10,7 +10,7 @@ public class Dungeon : MonoBehaviour
     public static int maxSize;
     static Dungeon()
     {
-        System.Random r = new System.Random();]
+        System.Random r = new System.Random();
         if (maxSize < 8)
         {
             maxSize = 16;

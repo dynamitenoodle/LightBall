@@ -22,15 +22,15 @@ public abstract class Entity : MonoBehaviour {
 	// updating the players position
 	public void UpdatePosition()
 	{
-		CheckWall();
 		vel += acc;
 		vel = Vector3.ClampMagnitude(vel, maxVel);
 		pos += vel;
-		transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+		GetComponent<Rigidbody2D>().velocity = vel;
+
 		acc = Vector3.zero;
 	}
 
-	void CheckWall()
+	/*void CheckWall()
 	{
 		foreach (GameObject wall in GameObject.FindGameObjectsWithTag("Wall"))
 		{
@@ -147,5 +147,14 @@ public abstract class Entity : MonoBehaviour {
 				}
 			}
 		}
-	}
+	}*/
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.tag == "Wall")
+        {
+            //Debug.Log(gameObject.name + " " + col.gameObject.name);
+            
+        }
+    }
 }

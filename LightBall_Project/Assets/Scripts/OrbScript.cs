@@ -18,7 +18,6 @@ public class OrbScript : Entity {
 	// Use this for initialization
 	void Start ()
     {
-        
         player = GameObject.FindGameObjectWithTag("Player");
 		heldPosition = player.transform.GetChild(0).gameObject.transform.position;
 		transform.position = heldPosition = new Vector3(heldPosition.x, heldPosition.y, transform.position.z); // sets the position of the orb and the held position with correct z positions
@@ -44,7 +43,7 @@ public class OrbScript : Entity {
         
         // Check if the player is holding the orb
         if (CheckHold())
-            pos = heldPosition;
+            transform.position = heldPosition;
         // it isn't so slow down
         else if (vel.magnitude < .01f)
         {

@@ -11,6 +11,7 @@ public class EnemyScript : Entity {
     public int speed = 1;
     public int health = 100;
     Transform player;
+    Vector3 home;
     public Vector3 direction;
     // Use this for initialization
     static EnemyScript()
@@ -21,6 +22,7 @@ public class EnemyScript : Entity {
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         pos = transform.position;
+        home = pos;
 	}
 	
 	// Update is called once per frame
@@ -37,22 +39,22 @@ public class EnemyScript : Entity {
        
             hitInfo = NOTCOLLIDING;
 
-      
-           
-            if (Physics2D.Raycast(transform.position, direction).distance < sightDist)
+
+        if (GetComponent<SpriteRenderer>().isVisible) {
+            if (Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
             {
-                hitInfo = Physics2D.Raycast(transform.position, direction);
+                hitInfo = Physics2D.Raycast(transform.position, player.position - transform.position);
             }
-            else if (Physics2D.Raycast(transform.position + transform.right * radius, direction).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist)
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, direction);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position);
             }
 
-            else if (Physics2D.Raycast(transform.position + transform.right * -radius, direction).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position).distance < sightDist)
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, direction);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position);
             }
-            else if((Physics2D.Raycast(transform.position,transform.right).distance<sightDist))
+            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist))
             {
                 hitInfo = Physics2D.Raycast(transform.position, transform.right);
             }
@@ -64,34 +66,38 @@ public class EnemyScript : Entity {
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, transform.right);
             }
-            else if(Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, -transform.right);
             }
-            if (hitInfo != NOTCOLLIDING)
-           { 
-               
-                    Vector3 dir1 = new Vector3(hitInfo.normal.y, hitInfo.normal.x).normalized;
-                    Vector3 dir2 = new Vector3(-hitInfo.normal.y, -hitInfo.normal.x).normalized;
-                    if (Vector3.Dot(dir1, direction.normalized) > 0)
-                    {
-                        direction = Vector3.Slerp(direction, dir1, .1f);
-                        
-                    }
-                    else
-                    {
-                        direction = Vector3.Slerp(direction, dir2, .1f);
-            }
-                  
+            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
+            {
 
+                Vector3 dir1 = new Vector3(hitInfo.normal.y, hitInfo.normal.x).normalized;
+                Vector3 dir2 = new Vector3(-hitInfo.normal.y, -hitInfo.normal.x).normalized;
+                if (Vector3.Dot(dir1, direction.normalized) > 0)
+                {
+                    direction = Vector3.Slerp(direction, dir1, .1f);
+
+                }
+                else
+                {
+                    direction = Vector3.Slerp(direction, dir2, .1f);
+                }
+
+
+            }
+            else if ((player.position - transform.position).sqrMagnitude <= sightDist * sightDist)
+            {
+
+                direction = Vector3.Slerp(direction, (player.position - transform.position).normalized, .1f);
+                Debug.DrawRay(transform.position, direction);
             }
             else
             {
-                
-                direction = Vector3.Slerp(direction,(player.position - transform.position).normalized,.1f);
-                Debug.DrawRay(transform.position, direction);
+                direction = Vector3.Slerp(direction, (home - transform.position).normalized, .1f);
             }
-           
+        }
        
         
         transform.up = direction;
@@ -102,10 +108,12 @@ public class EnemyScript : Entity {
     {
         if (collider.gameObject.tag == "Player")
         {
+            home = pos;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         if (collider.gameObject.tag == "Orb")
         {
+            home = pos;
             health -= 60;
         }
     }

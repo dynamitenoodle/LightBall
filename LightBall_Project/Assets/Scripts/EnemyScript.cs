@@ -117,4 +117,18 @@ public class EnemyScript : Entity {
             health -= 60;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            home = pos;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        if (collision.gameObject.tag == "Orb")
+        {
+            home = pos;
+            health -= 60;
+        }
+    }
 }

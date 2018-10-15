@@ -32,7 +32,14 @@ public class EnemyScript : Entity {
     {
         if(direction == Vector3.zero)
         direction = (player.position - transform.position).normalized;
-        if(Target == )
+        if ((player.position - transform.position).sqrMagnitude < sightDist * sightDist)
+        {
+            Target = player.position;//if we see the player go to player
+        }
+        else
+        {
+            Target = home;//else go home
+        }
         if (health < 0)
         {
             Destroy(this.gameObject);
@@ -40,39 +47,39 @@ public class EnemyScript : Entity {
         
        
             hitInfo = NOTCOLLIDING;
-        float sqm = (player.position - transform.position).sqrMagnitude;
+        
 
         if (GetComponent<SpriteRenderer>().isVisible) {
-            if (Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist && sqm<sightDist*sightDist)
+            if (Physics2D.Raycast(transform.position, Target - transform.position).distance < sightDist)//wall between us and target
             {
-                hitInfo = Physics2D.Raycast(transform.position, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position, Target - transform.position);
             }
-            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist)//wall between us and target on right
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, Target - transform.position);
             }
 
-            else if (Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * -radius, Target - transform.position).distance < sightDist)//wall between us and target on left
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, Target - transform.position);
             }
-            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist) && sqm < sightDist * sightDist)
+            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist))//wall on right
             {
                 hitInfo = Physics2D.Raycast(transform.position, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist && sqm < sightDist * sightDist)
+            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist)//wall on left
             {
                 hitInfo = Physics2D.Raycast(transform.position, -transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist && sqm < sightDist * sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist)//wall behind us on right
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist && sqm < sightDist * sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)//wall behind us on left
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, -transform.right);
             }
-            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist && sqm < sightDist * sightDist)
+            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, Target - transform.position).distance < sightDist)//we're headed straight for a wall
             {
 
                 Vector3 dir1 = new Vector3(hitInfo.normal.y, hitInfo.normal.x).normalized;
@@ -89,21 +96,26 @@ public class EnemyScript : Entity {
 
 
             }
-            else if ((player.position - transform.position).sqrMagnitude <= sightDist * sightDist)
-            {
-
-                direction = Vector3.Slerp(direction, (player.position - transform.position).normalized, .1f);
-                Debug.DrawRay(transform.position, direction);
-            }
             else
             {
-                direction = Vector3.Slerp(direction, (home - transform.position).normalized, .1f);
+
+                direction = Vector3.Slerp(direction, (Target - transform.position).normalized, .1f);
+                Debug.DrawRay(transform.position, direction);
             }
+            
         }
-       
-        
-        transform.up = direction;
-        acc += force * direction;
+
+        if ((Target - transform.position).sqrMagnitude > vel.sqrMagnitude)
+        {
+            transform.up = direction;
+            acc += force * direction;
+        }
+        else
+        {
+            vel = Vector3.zero;
+            acc = Vector3.zero;
+            transform.up = Vector3.up;
+        }
         UpdatePosition();
 	}
     private void OnTriggerEnter2D(Collider2D collider)

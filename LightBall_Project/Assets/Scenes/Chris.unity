@@ -176,6 +176,11 @@ Prefab:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114838014832497960, guid: 90e399df78f800d4c8f96dda937fdbc3,
+        type: 2}
+      propertyPath: sightDist
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90e399df78f800d4c8f96dda937fdbc3, type: 2}
   m_IsPrefabAsset: 0
@@ -236,6 +241,11 @@ Prefab:
         type: 2}
       propertyPath: m_Mass
       value: 0.6564032
+      objectReference: {fileID: 0}
+    - target: {fileID: 114838014832497960, guid: 90e399df78f800d4c8f96dda937fdbc3,
+        type: 2}
+      propertyPath: sightDist
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90e399df78f800d4c8f96dda937fdbc3, type: 2}
@@ -1167,6 +1177,11 @@ Prefab:
         type: 2}
       propertyPath: m_Mass
       value: 0.6564032
+      objectReference: {fileID: 0}
+    - target: {fileID: 114838014832497960, guid: 90e399df78f800d4c8f96dda937fdbc3,
+        type: 2}
+      propertyPath: sightDist
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90e399df78f800d4c8f96dda937fdbc3, type: 2}

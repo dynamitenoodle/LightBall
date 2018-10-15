@@ -120,4 +120,32 @@ public class OrbScript : Entity {
 		direction *= (force);
 		acc = direction;
 	}
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        // super temporary collision check
+        if (col.gameObject.tag == "Wall")
+        {
+            RaycastHit2D hitInfoUp = Physics2D.Raycast(transform.position, new Vector2(0, 1));
+            RaycastHit2D hitInfoDown = Physics2D.Raycast(transform.position, new Vector2(0, -1));
+            RaycastHit2D hitInfoLeft = Physics2D.Raycast(transform.position, new Vector2(-1, 0));
+            RaycastHit2D hitInfoRight = Physics2D.Raycast(transform.position, new Vector2(1, 0));
+
+            //Debug.Log(hitInfoUp.distance + " " + hitInfoDown.distance + " " + hitInfoLeft.distance + " " + hitInfoRight.distance);
+            if ((hitInfoUp.distance > hitInfoDown.distance && hitInfoUp.distance > hitInfoLeft.distance && hitInfoUp.distance > hitInfoRight.distance) 
+                || hitInfoDown.distance > hitInfoLeft.distance && hitInfoDown.distance > hitInfoRight.distance)
+            {
+                acc.y = -acc.y;
+                vel.y = -vel.y;
+            }
+
+            else
+            {
+                acc.x = -acc.x;
+                vel.x = -vel.x;
+            }
+
+            //UpdatePosition();
+        }
+    }
 }

@@ -37,7 +37,7 @@ public abstract class Entity : MonoBehaviour {
 			if (wall.GetComponent<Collider2D>().Distance(GetComponent<Collider2D>()).distance < .2)
 			{
 				Vector2 dir = Vector2.zero;
-				float lowest = 50;
+				float lowest = 50; 
 				for (int i = 0; i < 4; i++)
 				{
 					switch (i)

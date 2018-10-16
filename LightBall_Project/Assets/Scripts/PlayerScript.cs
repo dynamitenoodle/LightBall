@@ -48,28 +48,14 @@ public class PlayerScript : Entity {
 		if (y == 0)
 			vel.y *= .8f;
 
+        if (vel.magnitude < 0.05f)
+            vel = Vector3.zero;
+
 		UpdatePosition();
-		UpdateDirection(x,y);
-	}
 
-	// Updating which way the player is facing
-	void UpdateDirection(float x, float y)
-	{
-        if (x != 0)
-            goalRot = new Vector3(x, goalRot.y, goalRot.z);
-
-        if (y != 0)
-            goalRot = new Vector3(goalRot.x, y, goalRot.z);
-
-        goalRot.z = Mathf.Sqrt((goalRot.x*goalRot.x) + (goalRot.y * goalRot.y));
-        Vector3 goalRotEuler = Vector3.zero;
-        goalRotEuler.z = Mathf.Atan(goalRot.y / goalRot.x);
-        Debug.Log(goalRotEuler.z);
-
-        transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.rotation.eulerAngles, goalRotEuler, .1f));
+        if (x != 0 || y != 0)
+            transform.up = vel.normalized;
     }
-
-	
 }
 
 
@@ -169,4 +155,33 @@ bool NoKeysHeld(int axis)
     }
 
     return true;
+}*/
+
+
+/* Old Direction code
+// Updating which way the player is facing
+void UpdateDirection(float x, float y)
+{
+
+    if (x != 0)
+        goalRot = new Vector3(x, goalRot.y, goalRot.z);
+
+    if (y != 0)
+        goalRot = new Vector3(goalRot.x, y, goalRot.z);
+
+    float check = 0.1f;
+    if (goalRot.x < check && goalRot.x > -check)
+        goalRot.x = 0;
+
+    if (goalRot.y < check && goalRot.y > -check)
+        goalRot.y = 0;
+
+    Vector3 goalRotEuler = Vector3.zero;
+    float angleBefore = goalRot.y / goalRot.x;
+    Debug.Log(angleBefore);
+    goalRotEuler.z = Mathf.Atan(goalRot.y / goalRot.x);
+
+    transform.rotation = Quaternion.Euler(Vector3.Lerp(transform.rotation.eulerAngles, goalRotEuler, .1f));
+
+    transform.up = vel.normalized;
 }*/

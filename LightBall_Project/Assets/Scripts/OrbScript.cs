@@ -8,6 +8,7 @@ public class OrbScript : Entity {
     GameObject player;
     Vector3 heldPosition, thrownPosition;
     public bool isHeld;
+    
     bool canPickup;
     int pickupTimer, pickupTimerMax;
     Collider2D orbCol, orbCatchCol, playerCol;

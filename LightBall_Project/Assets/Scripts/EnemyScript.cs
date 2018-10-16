@@ -10,6 +10,7 @@ public class EnemyScript : Entity {
     public float radius;
     public int speed = 1;
     public int health = 100;
+    Vector3 Target;
     Transform player;
     Vector3 home;
     public Vector3 direction;
@@ -23,6 +24,7 @@ public class EnemyScript : Entity {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         pos = transform.position;
         home = pos;
+        Target = home;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +32,14 @@ public class EnemyScript : Entity {
     {
         if(direction == Vector3.zero)
         direction = (player.position - transform.position).normalized;
-
+        if ((player.position - transform.position).sqrMagnitude < sightDist * sightDist)
+        {
+            Target = player.position;//if we see the player go to player
+        }
+        else
+        {
+            Target = home;//else go home
+        }
         if (health < 0)
         {
             Destroy(this.gameObject);
@@ -38,39 +47,40 @@ public class EnemyScript : Entity {
         
        
             hitInfo = NOTCOLLIDING;
-
+        
 
         if (GetComponent<SpriteRenderer>().isVisible) {
-            if (Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
+            
+            if (Physics2D.Raycast(transform.position, Target - transform.position).distance < sightDist)//wall between us and target
             {
-                hitInfo = Physics2D.Raycast(transform.position, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position, Target - transform.position);
             }
-            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position).distance < sightDist)//wall between us and target on right
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * radius, Target - transform.position);
             }
 
-            else if (Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position + transform.right * -radius, Target - transform.position).distance < sightDist)//wall between us and target on left
             {
-                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, player.position - transform.position);
+                hitInfo = Physics2D.Raycast(transform.position + transform.right * -radius, Target - transform.position);
             }
-            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist))
+            else if ((Physics2D.Raycast(transform.position, transform.right).distance < sightDist))//wall on right
             {
                 hitInfo = Physics2D.Raycast(transform.position, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position, -transform.right).distance < sightDist)//wall on left
             {
                 hitInfo = Physics2D.Raycast(transform.position, -transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, transform.right).distance < sightDist)//wall behind us on right
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, transform.right);
             }
-            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)
+            else if (Physics2D.Raycast(transform.position - transform.up * radius, -transform.right).distance < sightDist)//wall behind us on left
             {
                 hitInfo = Physics2D.Raycast(transform.position - transform.up * radius, -transform.right);
             }
-            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, player.position - transform.position).distance < sightDist)
+            if (hitInfo != NOTCOLLIDING && Physics2D.Raycast(transform.position, Target - transform.position).distance < sightDist)//we're headed straight for a wall
             {
 
                 Vector3 dir1 = new Vector3(hitInfo.normal.y, hitInfo.normal.x).normalized;
@@ -87,33 +97,43 @@ public class EnemyScript : Entity {
 
 
             }
-            else if ((player.position - transform.position).sqrMagnitude <= sightDist * sightDist)
-            {
-
-                direction = Vector3.Slerp(direction, (player.position - transform.position).normalized, .1f);
-                Debug.DrawRay(transform.position, direction);
-            }
             else
             {
-                direction = Vector3.Slerp(direction, (home - transform.position).normalized, .1f);
+
+                direction = Vector3.Slerp(direction, (Target - transform.position).normalized, .04f);
+                Debug.DrawRay(transform.position, direction);
+            }
+            
+        }
+
+        if ((Target - transform.position).sqrMagnitude > (sightDist/8)*(sightDist/8))
+        {
+            transform.up = new Vector3(direction.x,direction.y,0);
+            acc += force * new Vector3(direction.x, direction.y, 0);
+        }
+        else
+        {
+            vel = Vector3.zero;
+            acc = Vector3.zero;
+            if ((transform.up - Vector3.up).magnitude > .01f)
+                transform.up = Vector3.Lerp(transform.up, Vector3.up, .3f);
+            else
+            {
+                transform.up = Vector3.up;
             }
         }
-       
-        
-        transform.up = direction;
-        acc += force * direction;
         UpdatePosition();
 	}
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.gameObject.tag == "Player")
         {
-            home = pos;
+            home = collider.transform.position;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        if (collider.gameObject.tag == "Orb")
+        if (collider.gameObject.tag == "Orb" && collider.gameObject.GetComponent<OrbScript>().Damage)
         {
-            home = pos;
+            home = collider.transform.position;
             health -= 60;
         }
     }
@@ -125,7 +145,7 @@ public class EnemyScript : Entity {
             home = pos;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        if (collision.gameObject.tag == "Orb")
+        if (collision.gameObject.tag == "Orb" && collision.gameObject.GetComponent<OrbScript>().Damage)
         {
             home = pos;
             health -= 60;

@@ -9,6 +9,16 @@ public class Dungeon : MonoBehaviour
     public static int sizeY;
     public static int maxSize;
     public GameObject bd;
+    static GameObject Floortile;
+    public static List<int> worldToMapPos(Vector3 m_worlPos)
+    {
+        int xPos = Mathf.FloorToInt(m_worlPos.x / Floortile.transform.localScale.x);
+        int yPos = Mathf.FloorToInt(m_worlPos.y / Floortile.transform.localScale.y);
+        List<int> mapPos = new List<int>();
+        mapPos.Add(xPos);
+        mapPos.Add(yPos);
+        return mapPos;
+    }
     public int Holes;
     static Dungeon()
     {
@@ -38,13 +48,13 @@ public class Dungeon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-       
+        Floortile = bd;
         int rooms = 22;
         List<Vector2> Dungeon = new List<Vector2>();
         while (Dungeon.Count < rooms)
         {
             Vector2 start = new Vector2(Random.Range(1, sizeX - 1), Random.Range(1, sizeY - 1));
-            Dungeon = Path(rooms, start);
+            Dungeon = Path(rooms,new Vector2(4,4));
         }
 
         for(int i = 0;i<Dungeon.Count;i++)
@@ -73,12 +83,17 @@ public class Dungeon : MonoBehaviour
             {
                 if (Map[i][t] == 1)
                 {
-                    Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
+                    Instantiate<GameObject>(bd, new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
                 }
-                if (Map[i][t] == 2)
+                else if (Map[i][t] == 2)
                 {
                     GameObject temp = Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
                     temp.GetComponent<MeshRenderer>().material.color = new Color(255, 0, 0);
+                }
+                else
+                {
+                    GameObject temp = Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
+                    temp.GetComponent<MeshRenderer>().material.color = new Color(255, 255, 255);
                 }
             }
         }
@@ -93,12 +108,13 @@ public class Dungeon : MonoBehaviour
             finalPath.Add(current);
 
             int b = 0;
+            int storedDir = 1; 
             int dir = 1;
             directions.Add(dir);
-            for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
             {
-            int length = r.Next(3, 5);
-            for (int j = 0; j <= length; j++)
+            int length = r.Next(1,3);
+            for (int i = 0; i < length; i++)
             {
                 /* if (r.Next(1, 8) == 1)
                  {
@@ -111,10 +127,7 @@ public class Dungeon : MonoBehaviour
                          dir = r.Next(3, 4);
                      }
                  }*/
-                if (finalPath.Count > rooms)
-                {
-                    break;
-                }
+               
                 if (dir == 1)
                 {//left
                     if (current.x - 1 >= 0)//can we
@@ -144,7 +157,7 @@ public class Dungeon : MonoBehaviour
                         }
                     }
                 }
-                if (dir == 2)
+                else if (dir == 2)
                 {//right
                     if (current.x + 1 < sizeX)//can we
                     {
@@ -172,7 +185,7 @@ public class Dungeon : MonoBehaviour
                         }
                     }
                 }
-                if (dir == 3)
+                else if (dir == 3)
                 {//down
                     if (current.y - 1 > 0)//can we
                     {
@@ -200,7 +213,7 @@ public class Dungeon : MonoBehaviour
                         }
                     }
                 }
-                if (dir == 4)
+                else if (dir == 4)
                 {//up
                     if (current.y + 1 < sizeY)//can we
                     {
@@ -231,8 +244,9 @@ public class Dungeon : MonoBehaviour
             }
             int forkRoom = 0;
             current = finalPath[forkRoom];
-            if(dir<4)
-            dir++;
+            if(storedDir<4)
+            storedDir++;
+            dir = storedDir;
         }
             while (finalPath.Count < rooms)
             {
@@ -243,7 +257,7 @@ public class Dungeon : MonoBehaviour
                 }
 
 
-                int length = r.Next(3, 5);
+                int length = r.Next(2,8);
                 for (int i = 0; i <= length; i++)
                 {
                     /* if (r.Next(1, 8) == 1)
@@ -376,7 +390,11 @@ public class Dungeon : MonoBehaviour
                     }
                 }
                 int forkRoom = r.Next(0, 2);
-                if (forkRoom == 1)
+                if (forkRoom == 0)
+                {
+                forkRoom = r.Next(1, finalPath.Count - 1);
+                }
+                else if (forkRoom == 1)
                 {
                     forkRoom = finalPath.Count / 2;
                 }

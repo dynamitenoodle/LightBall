@@ -55,8 +55,8 @@ public class PlayerScript : Entity {
 
 		UpdatePosition();
 
-        if (x != 0 || y != 0)
-            transform.up = vel.normalized;
+		if (x != 0 || y != 0)
+			transform.up = vel.normalized;
     }
 }
 

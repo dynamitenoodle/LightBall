@@ -21,7 +21,9 @@ public class PlayerScript : Entity {
 		Physics2D.IgnoreCollision(transform.GetChild(0).gameObject.GetComponent<Collider2D>(), orb.GetComponent<Collider2D>(), true);
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), transform.GetChild(0).gameObject.GetComponent<Collider2D>(), true);
         goalRot = Vector3.zero;
-    }
+		GetComponent<Rigidbody2D>().freezeRotation = true;
+
+	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()

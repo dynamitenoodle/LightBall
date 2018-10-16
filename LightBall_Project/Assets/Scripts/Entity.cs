@@ -148,13 +148,4 @@ public abstract class Entity : MonoBehaviour {
 			}
 		}
 	}*/
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.tag == "Wall")
-        {
-            //Debug.Log(gameObject.name + " " + col.gameObject.name);
-            
-        }
-    }
 }

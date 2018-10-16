@@ -6,7 +6,7 @@ public class OrbScript : Entity {
 
     // attributes
     GameObject player;
-    Vector3 heldPosition;
+    Vector3 heldPosition, thrownPosition;
     public bool isHeld;
     bool canPickup;
     int pickupTimer, pickupTimerMax;
@@ -35,22 +35,30 @@ public class OrbScript : Entity {
 		canPickup = true;
 		pickupTimer = 0;
 		pickupTimerMax = 60;
+		thrownPosition = Vector3.zero;
+
 	}
-	
+
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        
-        // Check if the player is holding the orb
-        if (CheckHold())
-            transform.position = heldPosition;
-        // it isn't so slow down
-        else if (vel.magnitude < .01f)
-        {
-            vel = Vector3.zero;
-        }
-        else
-            vel *= .9f;
+
+		// Check if the player is holding the orb
+		if (CheckHold())
+		{
+			if (vel != Vector3.zero)
+				vel = Vector3.zero;
+			if (acc != Vector3.zero)
+				acc = Vector3.zero;
+			transform.position = heldPosition;
+		}
+		// it isn't so slow down
+		else if (vel.magnitude < .01f)
+		{
+			vel = Vector3.zero;
+		}
+		else
+			vel *= .9f;
 
         // If the orb can't be picked up yet
         if (Damage)
@@ -114,6 +122,7 @@ public class OrbScript : Entity {
 		canPickup = false;
 
 		Vector3 direction;
+		thrownPosition = player.transform.position;
 		direction = player.transform.GetChild(0).gameObject.transform.position - player.transform.position;
 		direction.z = 0;
 
@@ -126,6 +135,39 @@ public class OrbScript : Entity {
         // super temporary collision check
         if (col.gameObject.tag == "Wall")
         {
+
+			Vector3 hit = col.contacts[0].normal;
+			float angle = Vector3.Angle(hit, Vector3.up);
+
+			if (Mathf.Approximately(angle, 0) || Mathf.Approximately(angle, 180))
+			{
+				//Down and Up
+				vel.y = -vel.y;
+				acc.y = -acc.y;
+			}
+			if (Mathf.Approximately(angle, 90))
+			{
+				// Sides
+				vel.x = -vel.x;
+				acc.x = -acc.x;
+				/*
+				Vector3 cross = Vector3.Cross(Vector3.forward, hit);
+				if (cross.y > 0)
+				{ // left side of the player
+					Debug.Log("Left");
+				}
+				else
+				{ // right side of the player
+					Debug.Log("Right");
+				}
+				*/
+			}
+
+		}
+    }
+}
+
+/* Old Collision
             RaycastHit2D hitInfoUp = Physics2D.Raycast(transform.position, new Vector2(0, 1));
             RaycastHit2D hitInfoDown = Physics2D.Raycast(transform.position, new Vector2(0, -1));
             RaycastHit2D hitInfoLeft = Physics2D.Raycast(transform.position, new Vector2(-1, 0));
@@ -145,7 +187,6 @@ public class OrbScript : Entity {
                 vel.x = -vel.x;
             }
 
-            //UpdatePosition();
-        }
-    }
-}
+			//UpdatePosition();
+
+			*/

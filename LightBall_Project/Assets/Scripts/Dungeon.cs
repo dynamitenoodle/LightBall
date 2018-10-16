@@ -38,17 +38,25 @@ public class Dungeon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Vector2 start = new Vector2(Random.Range(1,sizeX-1), Random.Range(1, sizeY-1));
+       
         int rooms = 22;
-        List<Vector2> Dungeon = Path(rooms, start);
+        List<Vector2> Dungeon = new List<Vector2>();
         while (Dungeon.Count < rooms)
         {
-            Dungeon = Path(rooms, new Vector2(Random.Range(0, sizeX), Random.Range(0, sizeY)));
+            Vector2 start = new Vector2(Random.Range(1, sizeX - 1), Random.Range(1, sizeY - 1));
+            Dungeon = Path(rooms, start);
         }
 
-        foreach (Vector2 item in Dungeon)
+        for(int i = 0;i<Dungeon.Count;i++)
         {
-            Map[(int)item.x][(int)item.y] = 1;
+            if (i == 0)
+            {
+                Map[(int)Dungeon[i].x][(int)Dungeon[i].y] = 2;
+            }
+            else
+            {
+                Map[(int)Dungeon[i].x][(int)Dungeon[i].y] = 1;
+            }
         }
         foreach (List<int> item in Map)
         {
@@ -67,21 +75,165 @@ public class Dungeon : MonoBehaviour
                 {
                     Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
                 }
+                if (Map[i][t] == 2)
+                {
+                    GameObject temp = Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
+                    temp.GetComponent<MeshRenderer>().material.color = new Color(255, 0, 0);
+                }
             }
         }
     }
     List<Vector2> Path(int rooms, Vector2 startPoint)
     {
-        List<Vector2> finalPath = new List<Vector2>();
+            List<Vector2> finalPath = new List<Vector2>();
             System.Random r = new System.Random();
-
+            
             Vector2 current = startPoint;
             List<int> directions = new List<int>();
             finalPath.Add(current);
 
             int b = 0;
-            int dir = r.Next(1, 4);
+            int dir = 1;
             directions.Add(dir);
+            for (int i = 0; i < 4; i++)
+            {
+            int length = r.Next(3, 5);
+            for (int j = 0; j <= length; j++)
+            {
+                /* if (r.Next(1, 8) == 1)
+                 {
+                     if (dir < 3)
+                     {
+                         dir = r.Next(3, 4);
+                     }
+                     else
+                     {
+                         dir = r.Next(3, 4);
+                     }
+                 }*/
+                if (finalPath.Count > rooms)
+                {
+                    break;
+                }
+                if (dir == 1)
+                {//left
+                    if (current.x - 1 >= 0)//can we
+                    {
+                        current = new Vector2(current.x - 1, current.y);
+                        if (!finalPath.Contains(current))
+                        {
+                            finalPath.Add(current);
+                            directions.Add(dir);
+                        }
+                        else
+                        {
+                            length++;
+                        }
+                    }
+                    else
+                    {
+                        while (dir == 1)
+                        {
+                            if (i == 0)
+                            {
+                                dir = 2;
+                                break;
+                            }
+                            dir = r.Next(3, 4);
+
+                        }
+                    }
+                }
+                if (dir == 2)
+                {//right
+                    if (current.x + 1 < sizeX)//can we
+                    {
+                        current = new Vector2(current.x + 1, current.y);
+                        if (!finalPath.Contains(current))
+                        {
+                            finalPath.Add(current);
+                            directions.Add(dir);
+                        }
+                        else
+                        {
+                            length++;
+                        }
+                    }
+                    else
+                    {
+                        while (dir == 2)
+                        {
+                            if (i == 0)
+                            {
+                                dir = 1;
+                                break;
+                            }
+                            dir = r.Next(3, 4);
+                        }
+                    }
+                }
+                if (dir == 3)
+                {//down
+                    if (current.y - 1 > 0)//can we
+                    {
+                        current = new Vector2(current.x, current.y - 1);
+                        if (!finalPath.Contains(current))
+                        {
+                            finalPath.Add(current);
+                            directions.Add(dir);
+                        }
+                        else
+                        {
+                            length++;
+                        }
+                    }
+                    else
+                    {
+                        while (dir == 3)
+                        {
+                            if (i == 0)
+                            {
+                                dir = 4;
+                                break;
+                            }
+                            dir = r.Next(1, 2);
+                        }
+                    }
+                }
+                if (dir == 4)
+                {//up
+                    if (current.y + 1 < sizeY)//can we
+                    {
+                        current = new Vector2(current.x, current.y + 1);
+                        if (!finalPath.Contains(current))
+                        {
+                            finalPath.Add(current);
+                            directions.Add(dir);
+                        }
+                        else
+                        {
+                            length++;
+                        }
+                    }
+                    else
+                    {
+                        while (dir == 4)
+                        {
+                            if (i == 0)
+                            {
+                                dir = 3;
+                                break;
+                            }
+                            dir = r.Next(1, 2);
+                        }
+                    }
+                }
+            }
+            int forkRoom = 0;
+            current = finalPath[forkRoom];
+            if(dir<4)
+            dir++;
+        }
             while (finalPath.Count < rooms)
             {
                 if (b > 1000000)
@@ -233,22 +385,15 @@ public class Dungeon : MonoBehaviour
                     forkRoom = finalPath.Count - 1;
                 }
                 current = finalPath[forkRoom];
-                try
+                if (directions[forkRoom] < 3)
                 {
-                    if (directions[forkRoom] < 3)
-                    {
-                        dir = Random.Range(3, 4);
-                    }
-                    else
-                    {
-                        dir = Random.Range(1, 2);
-                    }
+                    dir = Random.Range(3, 4);
                 }
-                catch (System.Exception)
+                else
                 {
-                    print(directions.Count);
-                    print(forkRoom);
+                    dir = Random.Range(1, 2);
                 }
+                
 
 
                 b++;

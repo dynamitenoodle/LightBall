@@ -50,6 +50,7 @@ public class EnemyScript : Entity {
         
 
         if (GetComponent<SpriteRenderer>().isVisible) {
+            
             if (Physics2D.Raycast(transform.position, Target - transform.position).distance < sightDist)//wall between us and target
             {
                 hitInfo = Physics2D.Raycast(transform.position, Target - transform.position);
@@ -99,22 +100,27 @@ public class EnemyScript : Entity {
             else
             {
 
-                direction = Vector3.Slerp(direction, (Target - transform.position).normalized, .1f);
+                direction = Vector3.Slerp(direction, (Target - transform.position).normalized, .04f);
                 Debug.DrawRay(transform.position, direction);
             }
             
         }
 
-        if ((Target - transform.position).sqrMagnitude > vel.sqrMagnitude)
+        if ((Target - transform.position).sqrMagnitude > (sightDist/8)*(sightDist/8))
         {
-            transform.up = direction;
-            acc += force * direction;
+            transform.up = new Vector3(direction.x,direction.y,0);
+            acc += force * new Vector3(direction.x, direction.y, 0);
         }
         else
         {
             vel = Vector3.zero;
             acc = Vector3.zero;
-            transform.up = Vector3.up;
+            if ((transform.up - Vector3.up).magnitude > .01f)
+                transform.up = Vector3.Lerp(transform.up, Vector3.up, .3f);
+            else
+            {
+                transform.up = Vector3.up;
+            }
         }
         UpdatePosition();
 	}
@@ -122,12 +128,12 @@ public class EnemyScript : Entity {
     {
         if (collider.gameObject.tag == "Player")
         {
-            home = pos;
+            home = collider.transform.position;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        if (collider.gameObject.tag == "Orb")
+        if (collider.gameObject.tag == "Orb" && collider.gameObject.GetComponent<OrbScript>().Damage)
         {
-            home = pos;
+            home = collider.transform.position;
             health -= 60;
         }
     }
@@ -139,7 +145,7 @@ public class EnemyScript : Entity {
             home = pos;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        if (collision.gameObject.tag == "Orb")
+        if (collision.gameObject.tag == "Orb" && collision.gameObject.GetComponent<OrbScript>().Damage)
         {
             home = pos;
             health -= 60;

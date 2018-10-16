@@ -22,7 +22,6 @@ public class PlayerScript : Entity {
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), transform.GetChild(0).gameObject.GetComponent<Collider2D>(), true);
         goalRot = Vector3.zero;
 		GetComponent<Rigidbody2D>().freezeRotation = true;
-
 	}
 	
 	// Update is called once per frame
@@ -167,7 +166,6 @@ bool NoKeysHeld(int axis)
 
     return true;
 }*/
-
 
 /* Old Direction code
 // Updating which way the player is facing

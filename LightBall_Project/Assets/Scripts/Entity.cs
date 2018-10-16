@@ -25,8 +25,9 @@ public abstract class Entity : MonoBehaviour {
 		vel += acc;
 		vel = Vector3.ClampMagnitude(vel, maxVel);
 		pos += vel;
+
         if(GetComponent<Rigidbody2D>()!=null)
-		GetComponent<Rigidbody2D>().velocity = vel;
+		    GetComponent<Rigidbody2D>().velocity = vel;
 
 		acc = Vector3.zero;
 	}

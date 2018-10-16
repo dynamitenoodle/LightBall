@@ -38,7 +38,7 @@ public class Dungeon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Vector2 start = new Vector2(Random.Range(0,sizeX), Random.Range(0, sizeY));
+        Vector2 start = new Vector2(Random.Range(1,sizeX-1), Random.Range(1, sizeY-1));
         int rooms = 22;
         List<Vector2> Dungeon = Path(rooms, start);
         while (Dungeon.Count < rooms)

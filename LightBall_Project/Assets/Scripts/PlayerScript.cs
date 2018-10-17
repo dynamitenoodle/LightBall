@@ -56,13 +56,17 @@ public class PlayerScript : Entity {
 
         if (x != 0.0f || y != 0.0f)
         {
-            if (Vector3.Dot(transform.up, new Vector3(x,y,0)) < -.9f)
+            if (Vector3.Dot(transform.up, new Vector3(x, y, 0)) < -.9f)
             {
-                transform.up = Vector3.Lerp(transform.up, (new Vector3(x, y, 0).normalized+transform.right).normalized, .3f);
+                transform.up = Vector3.Lerp(transform.up, (new Vector3(x, y, 0f).normalized + transform.right).normalized, .3f);
+            }
+            else if ((transform.up - new Vector3(x, y, 0f).normalized).magnitude < .09f)
+            {
+                transform.up = new Vector3(x, y, 0f).normalized;
             }
             else
             {
-                transform.up = Vector3.Lerp(transform.up, new Vector3(x, y, 0).normalized, .3f);
+                transform.up = Vector3.Lerp(transform.up, new Vector3(x, y, 0f).normalized, .3f);
             }
         }
     }

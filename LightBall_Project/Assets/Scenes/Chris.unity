@@ -1007,6 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bd: {fileID: 1541145318198990, guid: d579435345253a84aad5c3e428a1c79d, type: 2}
+  Wall: {fileID: 1035704057564210, guid: 234a6de589530b14db5de0d3375a56c6, type: 2}
   Holes: 9
 --- !u!4 &1950419837
 Transform:

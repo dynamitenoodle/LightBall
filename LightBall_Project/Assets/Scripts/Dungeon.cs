@@ -87,14 +87,10 @@ public class Dungeon : MonoBehaviour
                 }
                 else if (Map[i][t] == 2)
                 {
-                    GameObject temp = Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
-                    temp.GetComponent<MeshRenderer>().material.color = new Color(255, 0, 0);
+                    GameObject temp = Instantiate<GameObject>(Floortile, new Vector3(i * Floortile.transform.localScale.x, t * Floortile.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                    GameObject.FindGameObjectWithTag("Player").transform.position = temp.transform.position; //- new Vector3(temp.transform.localScale.x/2, temp.transform.localScale.y / 2, 0);
                 }
-                else
-                {
-                    GameObject temp = Instantiate<GameObject>(bd, new Vector3(i * 20, t * 20, 3), Quaternion.Euler(Vector3.zero));
-                    temp.GetComponent<MeshRenderer>().material.color = new Color(255, 255, 255);
-                }
+                
             }
         }
     }
@@ -116,18 +112,6 @@ public class Dungeon : MonoBehaviour
             int length = r.Next(1,3);
             for (int i = 0; i < length; i++)
             {
-                /* if (r.Next(1, 8) == 1)
-                 {
-                     if (dir < 3)
-                     {
-                         dir = r.Next(3, 4);
-                     }
-                     else
-                     {
-                         dir = r.Next(3, 4);
-                     }
-                 }*/
-               
                 if (dir == 1)
                 {//left
                     if (current.x - 1 >= 0)//can we

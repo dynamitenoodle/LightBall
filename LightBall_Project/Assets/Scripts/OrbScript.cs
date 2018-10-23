@@ -44,23 +44,25 @@ public class OrbScript : Entity {
 	void FixedUpdate ()
     {
 
-		// Check if the player is holding the orb
-		if (CheckHold())
-		{
-			if (vel != Vector3.zero)
-				vel = Vector3.zero;
-			if (acc != Vector3.zero)
-				acc = Vector3.zero;
-			transform.position = heldPosition;
-		}
-		// it isn't so slow down
-		else if (vel.magnitude < .01f)
-		{
-			vel = Vector3.zero;
-		}
-		else
-			vel *= .9f;
-
+        // Check if the player is holding the orb
+        if (CheckHold())
+        {
+            if (vel != Vector3.zero)
+                vel = Vector3.zero;
+            if (acc != Vector3.zero)
+                acc = Vector3.zero;
+            transform.position = heldPosition;
+        }
+        // it isn't so slow down
+        else if (vel.magnitude < .01f)
+        {
+            vel = Vector3.zero;
+        }
+        else
+        {
+            if(pickupTimer/pickupTimerMax<.5f)
+            vel *= .98f;
+        }
         // If the orb can't be picked up yet
         if (Damage)
         {
@@ -75,7 +77,7 @@ public class OrbScript : Entity {
         if (!canPickup)
 		{
 
-			if (pickupTimer > pickupTimerMax)
+			if (vel.magnitude <.03f)
 			{
 				canPickup = true;
 				pickupTimer = 0;
@@ -116,18 +118,18 @@ public class OrbScript : Entity {
 		return false;
 	}
 
-	// tosses the orb
-	public void ThrowOrb()
+    
+    // tosses the orb
+    public void ThrowOrb(float f_m = 1.0f)
 	{
 		isHeld = false;
 		canPickup = false;
-
+        pickupTimerMax = (int)(60f * f_m);
 		Vector3 direction;
 		thrownPosition = player.transform.position;
 		direction = player.transform.GetChild(0).gameObject.transform.position - player.transform.position;
 		direction.z = 0;
-
-		direction *= (force);
+		direction *= (force) * f_m;
 		acc = direction;
 	}
 

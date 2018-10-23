@@ -112,18 +112,6 @@ public class Dungeon : MonoBehaviour
             int length = r.Next(1,3);
             for (int i = 0; i < length; i++)
             {
-                /* if (r.Next(1, 8) == 1)
-                 {
-                     if (dir < 3)
-                     {
-                         dir = r.Next(3, 4);
-                     }
-                     else
-                     {
-                         dir = r.Next(3, 4);
-                     }
-                 }*/
-               
                 if (dir == 1)
                 {//left
                     if (current.x - 1 >= 0)//can we

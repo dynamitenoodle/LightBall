@@ -6,24 +6,22 @@ public class PlayerScript : Entity {
 
     // attributes
     GameObject orb;
-    InputManagerScript inputManager;
     Vector3 goalRot;
 
     [Range(1.0f, 50.0f)]
     public float chargeMultiplier;
     public float chargeMax = 2f;
 
-
+    float maxVelDef;
     float chargeTimer;
-
-
+    
     // Use this for initialization
     void Start ()
     {
         orb = GameObject.FindGameObjectWithTag("Orb");
-        inputManager = GameObject.Find("InputManager").GetComponent<InputManagerScript>();
 		pos = transform.position;
 		vel = Vector3.zero;
+        maxVelDef = maxVel;
 		acc = Vector3.zero;
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), orb.GetComponent<Collider2D>(), true);
 		Physics2D.IgnoreCollision(transform.GetChild(0).gameObject.GetComponent<Collider2D>(), orb.GetComponent<Collider2D>(), true);

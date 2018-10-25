@@ -43,7 +43,6 @@ public class OrbScript : Entity {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-
         // Check if the player is holding the orb
         if (CheckHold())
         {
@@ -61,7 +60,7 @@ public class OrbScript : Entity {
         else
         {
             if(pickupTimer/pickupTimerMax<.5f)
-            vel *= .98f;
+            vel *= .97f;
         }
         // If the orb can't be picked up yet
         if (Damage)
@@ -105,11 +104,12 @@ public class OrbScript : Entity {
 
 		else
 		{
-			if (canPickup)
+			if (canPickup && !Input.GetKey(KeyCode.Space))
 			{
 				if (playerCol.Distance(orbCol).distance < 0 || orbCatchCol.Distance(orbCol).distance < 0)
 				{
 					isHeld = true;
+					pickupTimer = 0;
 					return true;
 				}
 			}
@@ -169,27 +169,3 @@ public class OrbScript : Entity {
 		}
     }
 }
-
-/* Old Collision
-            RaycastHit2D hitInfoUp = Physics2D.Raycast(transform.position, new Vector2(0, 1));
-            RaycastHit2D hitInfoDown = Physics2D.Raycast(transform.position, new Vector2(0, -1));
-            RaycastHit2D hitInfoLeft = Physics2D.Raycast(transform.position, new Vector2(-1, 0));
-            RaycastHit2D hitInfoRight = Physics2D.Raycast(transform.position, new Vector2(1, 0));
-
-            //Debug.Log(hitInfoUp.distance + " " + hitInfoDown.distance + " " + hitInfoLeft.distance + " " + hitInfoRight.distance);
-            if ((hitInfoUp.distance > hitInfoDown.distance && hitInfoUp.distance > hitInfoLeft.distance && hitInfoUp.distance > hitInfoRight.distance) 
-                || hitInfoDown.distance > hitInfoLeft.distance && hitInfoDown.distance > hitInfoRight.distance)
-            {
-                acc.y = -acc.y;
-                vel.y = -vel.y;
-            }
-
-            else
-            {
-                acc.x = -acc.x;
-                vel.x = -vel.x;
-            }
-
-			//UpdatePosition();
-
-			*/

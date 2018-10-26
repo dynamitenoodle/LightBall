@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ public class PlayerScript : Entity {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-		MoveUpdate();	
+        MoveUpdate();	
 	}
 
     private void Update()
@@ -46,7 +47,8 @@ public class PlayerScript : Entity {
             pushed = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space)&&pushed || chargeTimer > chargeMax)
+        if (Input.GetKeyUp(KeyCode.Space) && pushed || chargeTimer > chargeMax)
+        {
             if (orb.GetComponent<OrbScript>().isHeld)
             {
                 float t = Mathf.Clamp(chargeTimer, .5f, chargeMax);
@@ -57,16 +59,6 @@ public class PlayerScript : Entity {
             }
         }
 
-        //if (!orb.GetComponent<OrbScript>().isHeld)
-        //{
-        //    if (Input.GetKey(KeyCode.LeftShift))
-        //        maxVel = maxVelDef * 1.5f;
-        //    else
-        //        maxVel = maxVelDef;
-        //}
-        //else
-        //    maxVel = maxVelDef;
-
     }
 
     void MoveUpdate()
@@ -75,7 +67,7 @@ public class PlayerScript : Entity {
 		float y = Input.GetAxisRaw("Vertical");
         float sprintMult = 0;
         // Movement
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !orb.GetComponent<OrbScript>().isHeld)
         {
             sprintMult = 1.5f;
             maxVel = 6;

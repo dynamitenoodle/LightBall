@@ -7,7 +7,6 @@ public class Camera : MonoBehaviour {
 	// attributes
 	GameObject player;
 
-
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");

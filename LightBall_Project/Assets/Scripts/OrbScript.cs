@@ -14,7 +14,7 @@ public class OrbScript : Entity {
     Collider2D orbCol, orbCatchCol, playerCol;
     public bool Damage
     {
-        get { return vel.magnitude > .06f; }
+        get { return vel.sqrMagnitude > .3f; }
     }
 	// Use this for initialization
 	void Start ()
@@ -53,14 +53,15 @@ public class OrbScript : Entity {
             transform.position = heldPosition;
         }
         // it isn't so slow down
-        else if (vel.magnitude < .01f)
+        else if (vel.magnitude < .1f)
         {
             vel = Vector3.zero;
         }
         else
         {
-            if(pickupTimer/pickupTimerMax<.5f)
+            if(pickupTimer/pickupTimerMax>.15f)
             vel *= .97f;
+            
         }
         // If the orb can't be picked up yet
         if (Damage)
@@ -75,13 +76,13 @@ public class OrbScript : Entity {
         }
         if (!canPickup)
 		{
-
-			if (vel.magnitude <.03f)
+            pickupTimer++;
+			if (!Damage)
 			{
 				canPickup = true;
-				pickupTimer = 0;
+				
 			}
-			pickupTimer++;
+			
 		}
         else if (GetComponent<SpriteRenderer>().color != Color.green)
         {
@@ -120,17 +121,22 @@ public class OrbScript : Entity {
 
     
     // tosses the orb
-    public void ThrowOrb(float f_m = 1.0f)
+    public void ThrowOrb(float f_m)
 	{
 		isHeld = false;
 		canPickup = false;
+        pickupTimer = 0;//just in case :thinking:
         pickupTimerMax = (int)(60f * f_m);
+        if (pickupTimerMax < 10)
+        {
+            pickupTimer = 10;
+        }
 		Vector3 direction;
 		thrownPosition = player.transform.position;
 		direction = player.transform.GetChild(0).gameObject.transform.position - player.transform.position;
 		direction.z = 0;
 		direction *= (force) * f_m;
-		acc = direction;
+        vel = direction + player.GetComponent<PlayerScript>().vel;
 	}
 
     private void OnCollisionEnter2D(Collision2D col)

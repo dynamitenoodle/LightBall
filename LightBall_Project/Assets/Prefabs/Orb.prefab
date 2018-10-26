@@ -189,8 +189,8 @@ MonoBehaviour:
   pos: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   acc: {x: 0, y: 0, z: 0}
-  maxVel: 50
-  force: 100
+  maxVel: 20
+  force: 30
   isHeld: 0
 --- !u!212 &212094394772900544
 SpriteRenderer:

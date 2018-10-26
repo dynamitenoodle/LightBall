@@ -99,6 +99,7 @@ public class Dungeon : MonoBehaviour
     }
     List<Vector2> Path(int rooms, Vector2 startPoint)
     {
+        int forkRoom = 0;
             List<Vector2> finalPath = new List<Vector2>();
             System.Random r = new System.Random();
             
@@ -229,13 +230,35 @@ public class Dungeon : MonoBehaviour
                     }
                 }
             }
-            int forkRoom = 0;
+            forkRoom = 0;
             current = finalPath[forkRoom];
             if(storedDir<4)
             storedDir++;
             dir = storedDir;
         }
-            while (finalPath.Count < rooms)
+        forkRoom = r.Next(0, 2);
+        if (forkRoom == 0)
+        {
+            forkRoom = r.Next(1, finalPath.Count - 1);
+        }
+        else if (forkRoom == 1)
+        {
+            forkRoom = finalPath.Count / 2;
+        }
+        else if (forkRoom == 2)
+        {
+            forkRoom = finalPath.Count - 1;
+        }
+        current = finalPath[forkRoom];
+        if (directions[forkRoom] < 3)
+        {
+            dir = Random.Range(3, 4);
+        }
+        else
+        {
+            dir = Random.Range(1, 2);
+        }
+        while (finalPath.Count < rooms)
             {
                 if (b > 1000000)
                 {
@@ -376,7 +399,7 @@ public class Dungeon : MonoBehaviour
                         }
                     }
                 }
-                int forkRoom = r.Next(0, 2);
+                forkRoom = r.Next(0, 2);
                 if (forkRoom == 0)
                 {
                 forkRoom = r.Next(1, finalPath.Count - 1);

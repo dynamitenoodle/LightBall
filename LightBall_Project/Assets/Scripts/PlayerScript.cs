@@ -7,10 +7,10 @@ public class PlayerScript : Entity {
     // attributes
     GameObject orb;
     Vector3 goalRot;
-
-    [Range(1.0f, 50.0f)]
+    bool pushed;
+    
     public float chargeMultiplier;
-    public float chargeMax = 2f;
+    public float chargeMax = 1f;
 
     float maxVelDef;
     float chargeTimer;
@@ -18,6 +18,7 @@ public class PlayerScript : Entity {
     // Use this for initialization
     void Start ()
     {
+        pushed = false;
         orb = GameObject.FindGameObjectWithTag("Orb");
 		pos = transform.position;
 		vel = Vector3.zero;
@@ -28,7 +29,7 @@ public class PlayerScript : Entity {
 		Physics2D.IgnoreCollision(GetComponent<Collider2D>(), transform.GetChild(0).gameObject.GetComponent<Collider2D>(), true);
         goalRot = Vector3.zero;
 		GetComponent<Rigidbody2D>().freezeRotation = true;
-        chargeTimer = 1.0f;
+        chargeTimer = 0.0f;
 	}
 	
 	// Update is called once per frame
@@ -39,18 +40,20 @@ public class PlayerScript : Entity {
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space)&&orb.GetComponent<OrbScript>().isHeld)
         {
             chargeTimer += chargeMultiplier * Time.deltaTime;
+            pushed = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space) || chargeTimer > chargeMax)
-        {
+        if (Input.GetKeyUp(KeyCode.Space)&&pushed || chargeTimer > chargeMax)
             if (orb.GetComponent<OrbScript>().isHeld)
             {
-                orb.GetComponent<OrbScript>().ThrowOrb(Mathf.Clamp(chargeTimer, 1.0f, chargeMax));
+                float t = Mathf.Clamp(chargeTimer, .5f, chargeMax);
+                orb.GetComponent<OrbScript>().ThrowOrb(t);
                 Debug.Log("chargeTimer: " + chargeTimer);
-                chargeTimer = 1.0f;
+                chargeTimer = 0.0f;
+                pushed = false;
             }
         }
 
@@ -70,10 +73,20 @@ public class PlayerScript : Entity {
 	{
 		float x = Input.GetAxisRaw("Horizontal");
 		float y = Input.GetAxisRaw("Vertical");
-
-		// Movement
-		vel.x += x * force;
-		vel.y += y * force;
+        float sprintMult = 0;
+        // Movement
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            sprintMult = 1.5f;
+            maxVel = 6;
+        }
+        else
+        {
+            sprintMult = 1f;
+            maxVel = 3;
+        }
+        vel.x += x * force * sprintMult;
+		vel.y += y * force * sprintMult;
 
 		if (x == 0)
 			vel.x *= .5f;
@@ -83,7 +96,7 @@ public class PlayerScript : Entity {
 
         if (vel.magnitude < 0.1f)
             vel = Vector3.zero;
-
+        
 		UpdatePosition();
 
         if (x != 0.0f || y != 0.0f)

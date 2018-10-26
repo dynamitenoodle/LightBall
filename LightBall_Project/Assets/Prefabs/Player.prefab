@@ -314,8 +314,8 @@ MonoBehaviour:
   acc: {x: 0, y: 0, z: 0}
   maxVel: 3
   force: 15
-  chargeMultiplier: 5
-  chargeMax: 3
+  chargeMultiplier: 1.5
+  chargeMax: 1
 --- !u!212 &212142494543955304
 SpriteRenderer:
   m_ObjectHideFlags: 1

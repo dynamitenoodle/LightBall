@@ -45,12 +45,25 @@ public class PlayerScript : Entity {
         }
 
         if (Input.GetKeyUp(KeyCode.Space) || chargeTimer > chargeMax)
+        {
             if (orb.GetComponent<OrbScript>().isHeld)
             {
                 orb.GetComponent<OrbScript>().ThrowOrb(Mathf.Clamp(chargeTimer, 1.0f, chargeMax));
                 Debug.Log("chargeTimer: " + chargeTimer);
                 chargeTimer = 1.0f;
             }
+        }
+
+        //if (!orb.GetComponent<OrbScript>().isHeld)
+        //{
+        //    if (Input.GetKey(KeyCode.LeftShift))
+        //        maxVel = maxVelDef * 1.5f;
+        //    else
+        //        maxVel = maxVelDef;
+        //}
+        //else
+        //    maxVel = maxVelDef;
+
     }
 
     void MoveUpdate()

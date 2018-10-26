@@ -55,6 +55,18 @@ public class PlayerScript : Entity {
                 chargeTimer = 0.0f;
                 pushed = false;
             }
+        }
+
+        //if (!orb.GetComponent<OrbScript>().isHeld)
+        //{
+        //    if (Input.GetKey(KeyCode.LeftShift))
+        //        maxVel = maxVelDef * 1.5f;
+        //    else
+        //        maxVel = maxVelDef;
+        //}
+        //else
+        //    maxVel = maxVelDef;
+
     }
 
     void MoveUpdate()

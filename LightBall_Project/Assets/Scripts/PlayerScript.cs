@@ -41,7 +41,7 @@ public class PlayerScript : Entity {
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space)&&orb.GetComponent<OrbScript>().isHeld)
+        if (Input.GetButton("Shoot")&&orb.GetComponent<OrbScript>().isHeld)
         {
             chargeTimer += chargeMultiplier * Time.deltaTime;
             pushed = true;

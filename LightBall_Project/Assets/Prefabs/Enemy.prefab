@@ -102,7 +102,7 @@ MonoBehaviour:
   pos: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   acc: {x: 0, y: 0, z: 0}
-  maxVel: 2
+  maxVel: 4
   force: 5
   sightDist: 6
   radius: 0.5

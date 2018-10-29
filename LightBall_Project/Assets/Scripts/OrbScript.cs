@@ -14,7 +14,7 @@ public class OrbScript : Entity {
     Collider2D orbCol, orbCatchCol, playerCol;
     public bool Damage
     {
-        get { return vel.sqrMagnitude > .3f; }
+        get { return vel.sqrMagnitude > 2.0f; }
     }
 	// Use this for initialization
 	void Start ()

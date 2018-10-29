@@ -10,8 +10,10 @@ public class EnemyScript : Entity {
     public float radius;
     public int speed = 1;
     public int health = 100;
+    public int damageTaken = 60;
     Vector3 Target;
-    Transform player;
+    [HideInInspector]
+    public Transform player;
     Vector3 home;
     public Vector3 direction;
     // Use this for initialization
@@ -134,7 +136,7 @@ public class EnemyScript : Entity {
         if (collider.gameObject.tag == "Orb" && collider.gameObject.GetComponent<OrbScript>().Damage)
         {
             home = collider.transform.position;
-            health -= 60;
+            health -= damageTaken;
         }
     }
 

@@ -105,7 +105,7 @@ public class OrbScript : Entity {
 
 		else
 		{
-			if (canPickup && !Input.GetKey(KeyCode.Space))
+			if (canPickup && !Input.GetButton("Shoot"))
 			{
 				if (playerCol.Distance(orbCol).distance < 0 || orbCatchCol.Distance(orbCol).distance < 0)
 				{
@@ -126,7 +126,7 @@ public class OrbScript : Entity {
 		isHeld = false;
 		canPickup = false;
         pickupTimer = 0;//just in case :thinking:
-        pickupTimerMax = (int)(60f * f_m);
+        pickupTimerMax = (int)(40f * f_m);
         if (pickupTimerMax < 10)
         {
             pickupTimer = 10;

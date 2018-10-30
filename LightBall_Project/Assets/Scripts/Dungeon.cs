@@ -11,6 +11,7 @@ public class Dungeon : MonoBehaviour
     public GameObject bd;
     static GameObject Floortile;
     public GameObject Wall;
+	public int zPosition = 1;
     public static List<int> worldToMapPos(Vector3 m_worlPos)
     {
         int xPos = Mathf.FloorToInt(m_worlPos.x / Floortile.transform.localScale.x);

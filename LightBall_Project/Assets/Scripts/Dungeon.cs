@@ -11,6 +11,7 @@ public class Dungeon : MonoBehaviour
     public GameObject bd;
     static GameObject Floortile;
     public GameObject Wall;
+	public int zPosition = 1;
     public static List<int> worldToMapPos(Vector3 m_worlPos)
     {
         int xPos = Mathf.FloorToInt(m_worlPos.x / Floortile.transform.localScale.x);
@@ -84,11 +85,11 @@ public class Dungeon : MonoBehaviour
             {
                 if (Map[i][t] == 1)
                 {
-                    Instantiate<GameObject>(bd, new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                    Instantiate<GameObject>(bd, new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                 }
                 else if (Map[i][t] == 2)
                 {
-                    GameObject temp = Instantiate<GameObject>(Floortile, new Vector3(i * Floortile.transform.localScale.x, t * Floortile.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                    GameObject temp = Instantiate<GameObject>(Floortile, new Vector3(i * Floortile.transform.localScale.x, t * Floortile.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                     GameObject.FindGameObjectWithTag("Player").transform.position = temp.transform.position; //- new Vector3(temp.transform.localScale.x/2, temp.transform.localScale.y / 2, 0);
                 }
                 
@@ -459,12 +460,12 @@ public class Dungeon : MonoBehaviour
                     //Lower Left
                     else if (i == 0 && j == sizeX-1)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3.01f), Quaternion.Euler(new Vector3(0, 0, 90)));
                         //Check Down
                         if (Map[i][j - 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
 
                     }
@@ -472,89 +473,89 @@ public class Dungeon : MonoBehaviour
                     //Lower Right
                     else if (i == sizeY-1 && j == sizeX-1)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         
                     }
                     //Edges
                     //Left
                     else if (i == 0)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         //Check right
                         if (Map[i+1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check up
                         if (Map[i][j+1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                         //Check Down
                         if (Map[i][j-1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                     }
                     //Right
                     else if (i == sizeY-1)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         //Check left
                         if (Map[i - 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check up
                         if (Map[i][j + 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                         //Check Down
                         if (Map[i][j - 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                     }
                     //Up
                     else if (j == sizeX-1)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         //Check left
                         if (Map[i - 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check right
                         if (Map[i + 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check Down
                         if (Map[i][j - 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                     }
                     //Down
                     else if (j == 0)
                     {
-                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                        Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         //Check left
                         if (Map[i - 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check right
                         if (Map[i + 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check up
                         if (Map[i][j + 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                     }
                     //other
@@ -563,22 +564,22 @@ public class Dungeon : MonoBehaviour
                         //Check left
                         if (Map[i - 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x - 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check right
                         if (Map[i + 1][j] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, 3), Quaternion.Euler(Vector3.zero));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x + 11, j * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
                         }
                         //Check up
                         if (Map[i][j + 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y + 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                         //Check Down
                         if (Map[i][j - 1] == 0)
                         {
-                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, 3), Quaternion.Euler(new Vector3(0, 0, 90)));
+                            Instantiate<GameObject>(Wall, new Vector3(i * bd.transform.localScale.x, j * bd.transform.localScale.y - 11, zPosition), Quaternion.Euler(new Vector3(0, 0, 90)));
                         }
                     }
                 }

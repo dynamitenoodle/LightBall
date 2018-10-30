@@ -53,7 +53,7 @@ public class PlayerScript : Entity {
             {
                 float t = Mathf.Clamp(chargeTimer, .5f, chargeMax);
                 orb.GetComponent<OrbScript>().ThrowOrb(t);
-                Debug.Log("chargeTimer: " + chargeTimer);
+                //Debug.Log("chargeTimer: " + chargeTimer);
                 chargeTimer = 0.0f;
                 pushed = false;
             }

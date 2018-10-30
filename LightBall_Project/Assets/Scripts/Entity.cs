@@ -9,16 +9,6 @@ public abstract class Entity : MonoBehaviour {
 	public Vector3 pos, vel, acc;
 	public float maxVel, force;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	// updating the players position
 	public void UpdatePosition()
 	{

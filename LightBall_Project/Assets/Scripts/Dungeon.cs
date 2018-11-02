@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Dungeon : MonoBehaviour
 {
+    public static RoomScript startRoom;
+    public static List<List<RoomScript>> Rooms;
     public static List<List<int>> Map;
     public static int sizeX;
     public static int sizeY;
@@ -40,9 +42,11 @@ public class Dungeon : MonoBehaviour
         Map = new List<List<int>>();
         for (int x = 0; x < sizeX; x++)
         {
+            Rooms.Add(new List<RoomScript>());
             Map.Add(new List<int>());
             for (int y = 0; y < sizeY; y++)
             {
+                Rooms[x].Add(null);
                 Map[x].Add(0);
             }
         }
@@ -63,26 +67,60 @@ public class Dungeon : MonoBehaviour
         {
             if (i == 0)
             {
+                Rooms[(int)Dungeon[i].x][(int)Dungeon[i].y] = new RoomScript();
+                startRoom = Rooms[(int)Dungeon[i].x][(int)Dungeon[i].y];
+                startRoom.type = RoomScript.RoomType.StartRoom;
                 Map[(int)Dungeon[i].x][(int)Dungeon[i].y] = 2;
             }
             else
             {
+                Rooms[(int)Dungeon[i].x][(int)Dungeon[i].y] = new RoomScript();
                 Map[(int)Dungeon[i].x][(int)Dungeon[i].y] = 1;
             }
         }
-        foreach (List<int> item in Map)
+        for (int x = 0; x < Rooms.Count; x++)
         {
-            string line = "";
-            for (int i = 0; i < item.Count; i++)
+            for (int y = 0; y < Rooms[x].Count; y++)
             {
-                line += item[i];
+                if (Rooms[x][y] != null)
+                {
+                    if (x + 1 < Rooms.Count)
+                    {
+                        if (Rooms[x + 1][y] != null)
+                        {
+                            Rooms[x][y].right = Rooms[x + 1][y];
+                        }
+                    }
+                    if (x - 1 >= 0)
+                    {
+                        if (Rooms[x - 1][y] != null)
+                        {
+                            Rooms[x][y].left = Rooms[x - 1][y];
+                        }
+                    }
+                    if (y + 1 < Rooms[x].Count)
+                    {
+                        if (Rooms[x][y + 1] != null)
+                        {
+                            Rooms[x][y].up = Rooms[x][y + 1];
+                        }
+                    }
+                    if (y - 1 >= 0)
+                    {
+                        if (Rooms[x][y - 1] != null)
+                        {
+                            Rooms[x][y].down = Rooms[x][y - 1];
+                        }
+                    }
+                }
             }
-            print(line);
         }
+        startRoom.decideTypes();
         for (int i = 0; i < Map.Count; i++)
         {
             for (int t = 0; t < Map[i].Count; t++)
             {
+
                 if (Map[i][t] == 1)
                 {
                     Instantiate<GameObject>(bd, new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));

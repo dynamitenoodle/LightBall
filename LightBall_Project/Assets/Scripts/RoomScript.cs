@@ -15,11 +15,13 @@ public class RoomScript : MonoBehaviour {
         cornerUpRight,
         cornerDownRight,
         cornerDownLeft,
-        TriUp,
-        TriDown,
-        TriLeft,
-        TriRight,
+        triUp,
+        triDown,
+        triLeft,
+        triRight,
         Quad,
+        StartRoom
+        
     }
     public static object lockObject;
     public static List<RoomScript> lastList;
@@ -28,6 +30,11 @@ public class RoomScript : MonoBehaviour {
     public RoomScript down;
     public RoomScript left;
     public RoomScript right;
+    static RoomScript()
+    {
+        lockObject = new object();
+        lastList = new List<RoomScript>();
+    }
     public void decideTypes()
     {
         int neighbors = 4;
@@ -47,89 +54,91 @@ public class RoomScript : MonoBehaviour {
         {
             neighbors--;
         }
-        if (neighbors == 4)
+        if (type != RoomType.StartRoom)
         {
-            type = RoomType.Quad;
-        }
-        else if (neighbors == 3)
-        {
-            if (up == null)
+            if (neighbors == 4)
             {
-                type = RoomType.TriDown;
+                type = RoomType.Quad;
             }
-            else if (down == null)
+            else if (neighbors == 3)
             {
-                type = RoomType.TriUp;
-            }
-            else if (left == null)
-            {
-                type = RoomType.TriRight;
-            }
-            else
-            {
-                type = RoomType.TriLeft;
-            }
-        }
-        else if (neighbors == 2)
-        {
-            if (up == null)
-            {
-                if (left == null)
+                if (up == null)
                 {
-                    type = RoomType.cornerUpLeft;
-                }
-                else if (right == null)
-                {
-                    type = RoomType.cornerUpRight;
+                    type = RoomType.triDown;
                 }
                 else if (down == null)
                 {
-                    type = RoomType.hallwayUpDown;
+                    type = RoomType.triUp;
+                }
+                else if (left == null)
+                {
+                    type = RoomType.triRight;
+                }
+                else
+                {
+                    type = RoomType.triLeft;
                 }
             }
-            else if (down == null)
+            else if (neighbors == 2)
             {
-                if (left == null)
+                if (up == null)
                 {
-                    type = RoomType.cornerDownLeft;
+                    if (left == null)
+                    {
+                        type = RoomType.cornerUpLeft;
+                    }
+                    else if (right == null)
+                    {
+                        type = RoomType.cornerUpRight;
+                    }
+                    else if (down == null)
+                    {
+                        type = RoomType.hallwayUpDown;
+                    }
                 }
-                else if (right == null)
+                else if (down == null)
                 {
-                    type = RoomType.cornerDownRight;
+                    if (left == null)
+                    {
+                        type = RoomType.cornerDownLeft;
+                    }
+                    else if (right == null)
+                    {
+                        type = RoomType.cornerDownRight;
+                    }
+                }
+                else if (left == null)
+                {
+                    if (right == null)
+                    {
+                        type = RoomType.hallwayLeftRight;
+                    }
                 }
             }
-            else if (left == null)
+            else
             {
-                if (right == null)
+                if (up != null)
                 {
-                    type = RoomType.hallwayLeftRight;
+                    type = RoomType.deadEndDown;
+                }
+                else if (down != null)
+                {
+                    type = RoomType.deadEndUp;
+                }
+                else if (left != null)
+                {
+                    type = RoomType.deadEndLeft;
+                }
+                else if (right != null)
+                {
+                    type = RoomType.deadEndRight;
                 }
             }
         }
-        else
+        lock (lockObject)
         {
-            if (up != null)
-            {
-                type = RoomType.deadEndDown;
-            }
-            else if (down != null)
-            {
-                type = RoomType.deadEndUp;
-            }
-            else if (left != null)
-            {
-                type = RoomType.deadEndLeft;
-            }
-            else if (right != null)
-            {
-                type = RoomType.deadEndRight;
-            }
+            lastList.Add(this);
         }
-        if (lastList == null)
-        {
-            lastList = new List<RoomScript>();
-        }
-        lastList.Add(this);
         if (up != null && !lastList.Contains(up))
         {
             up.decideTypes();

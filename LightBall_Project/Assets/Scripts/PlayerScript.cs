@@ -67,15 +67,15 @@ public class PlayerScript : Entity {
 		float y = Input.GetAxisRaw("Vertical");
         float sprintMult = 0;
         // Movement
-        if (Input.GetKey(KeyCode.LeftShift) && !orb.GetComponent<OrbScript>().isHeld)
+        if (Input.GetButton("Sprint") && !orb.GetComponent<OrbScript>().isHeld)
         {
             sprintMult = 1.5f;
-            maxVel = 6;
+            maxVel = 9;
         }
         else
         {
             sprintMult = 1f;
-            maxVel = 3;
+            maxVel = 4.5f;
         }
         vel.x += x * force * sprintMult;
 		vel.y += y * force * sprintMult;

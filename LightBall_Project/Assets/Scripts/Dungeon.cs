@@ -39,6 +39,7 @@ public class Dungeon : MonoBehaviour
         {
             sizeY = 8;
         }
+        Rooms = new List<List<RoomScript>>();
         Map = new List<List<int>>();
         for (int x = 0; x < sizeX; x++)
         {
@@ -116,21 +117,100 @@ public class Dungeon : MonoBehaviour
             }
         }
         startRoom.decideTypes();
-        for (int i = 0; i < Map.Count; i++)
+        for (int i = 0; i < Rooms.Count; i++)
         {
-            for (int t = 0; t < Map[i].Count; t++)
+            for (int t = 0; t < Rooms[i].Count; t++)
             {
+                GameObject temp;
+                if(Rooms[i][t]!=null)
+                switch (Rooms[i][t].type)
+                {
+                    case RoomScript.RoomType.deadEndUp:
+                        temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/End/End1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 180));
+                        break;
+                    case RoomScript.RoomType.deadEndDown:
+                        temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/End/End1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));    
+                        break;
+                    case RoomScript.RoomType.deadEndRight:
+                        temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/End/End1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 270));
+                        break;
+                    case RoomScript.RoomType.deadEndLeft:
+                        temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/End/End1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 90));
+                        break;
+                    case RoomScript.RoomType.hallwayUpDown:
+                            if (Random.value > .5f)
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Hallway/Hallway1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 90));
+                            }
+                            else
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Hallway/Hallway1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 270));
+                            }
+                        break;
+                    case RoomScript.RoomType.hallwayLeftRight:
+                            if (Random.value > .5f)
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Hallway/Hallway1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));
+                            }
+                            else
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Hallway/Hallway1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 180));
+                            }
+                            break;
+                    case RoomScript.RoomType.cornerUpLeft:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Corner/Corner1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 270));
+                            break;
+                    case RoomScript.RoomType.cornerUpRight:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Corner/Corner1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 180));
+                            break;
+                    case RoomScript.RoomType.cornerDownRight:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Corner/Corner1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 90));
+                            break;
+                    case RoomScript.RoomType.cornerDownLeft:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Corner/Corner1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));
+                            break;
+                    case RoomScript.RoomType.triUp:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Tri/Tri1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));
+                            break;
+                    case RoomScript.RoomType.triDown:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Tri/Tri1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 180));
+                            break;
+                    case RoomScript.RoomType.triLeft:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Tri/Tri1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 90));
+                            break;
+                    case RoomScript.RoomType.triRight:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Tri/Tri1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 270));
+                            break;
+                    case RoomScript.RoomType.Quad:
+                            float y = Random.value;
+                            if (y > .75f)
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Quad/Quad1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 270));
+                            }
+                            else if (y > .5f)
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Quad/Quad1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 180));
+                            }
+                            else if (y > .25f)
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Quad/Quad1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 90));
+                            }
+                            else
+                            {
+                                temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Quad/Quad1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));
+                            }
+                            break;
+                    case RoomScript.RoomType.StartRoom:
+                            temp = Instantiate<GameObject>(Resources.Load<GameObject>("Rooms/Spawn/Spawn1"), new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, 0f), Quaternion.Euler(0, 0, 0));
+                            GameObject Op = GameObject.FindGameObjectWithTag("Player");
+                            Op.transform.position = temp.transform.position; //- new Vector3(temp.transform.localScale.x/2, temp.transform.localScale.y / 2, 0);
 
-                if (Map[i][t] == 1)
-                {
-                    Instantiate<GameObject>(bd, new Vector3(i * bd.transform.localScale.x, t * bd.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
+                            break;
+                    default:
+                        break;
                 }
-                else if (Map[i][t] == 2)
-                {
-                    GameObject temp = Instantiate<GameObject>(Floortile, new Vector3(i * Floortile.transform.localScale.x, t * Floortile.transform.localScale.y, zPosition), Quaternion.Euler(Vector3.zero));
-                    GameObject.FindGameObjectWithTag("Player").transform.position = temp.transform.position; //- new Vector3(temp.transform.localScale.x/2, temp.transform.localScale.y / 2, 0);
-                }
-                
+
+
             }
         }
 
@@ -472,7 +552,7 @@ public class Dungeon : MonoBehaviour
     //Builds walls after the maze is built
     void PlaceWalls()
     {
-
+        /*
         for (int i = 0; i < Map.Count - 1; i++)
         {
             for (int j = 0; j < Map[i].Count; j++)
@@ -622,7 +702,7 @@ public class Dungeon : MonoBehaviour
                     }
                 }
             }
-        }
+        }*/
     }
     // Update is called once per frame
     void Update()

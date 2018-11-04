@@ -584,6 +584,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4698619132639736}
+  - component: {fileID: 64036293812723756}
   m_Layer: 0
   m_Name: Walls
   m_TagString: Untagged
@@ -3388,7 +3389,7 @@ Transform:
   m_GameObject: {fileID: 1236080821508936}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -106.1, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 1}
+  m_LocalScale: {x: 20, y: 20, z: 3}
   m_Children:
   - {fileID: 4698619132639736}
   - {fileID: 224249266214842582}
@@ -6229,6 +6230,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.99999994}
   m_EdgeRadius: 0
+--- !u!64 &64036293812723756
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1189632307891264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 0}
 --- !u!65 &65865750089059046
 BoxCollider:
   m_ObjectHideFlags: 1

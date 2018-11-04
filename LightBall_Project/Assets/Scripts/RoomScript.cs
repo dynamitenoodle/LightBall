@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomScript : MonoBehaviour {
+public class RoomScript {
     public enum RoomType
     {
         deadEndUp,
@@ -34,6 +34,10 @@ public class RoomScript : MonoBehaviour {
     {
         lockObject = new object();
         lastList = new List<RoomScript>();
+    }
+    public RoomScript()
+    {
+
     }
     public void decideTypes()
     {

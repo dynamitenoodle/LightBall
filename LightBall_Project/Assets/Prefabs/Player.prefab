@@ -253,7 +253,7 @@ MonoBehaviour:
   pos: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   acc: {x: 0, y: 0, z: 0}
-  maxVel: 3
+  maxVel: 4.5
   force: 15
   chargeMultiplier: 1.5
   chargeMax: 1

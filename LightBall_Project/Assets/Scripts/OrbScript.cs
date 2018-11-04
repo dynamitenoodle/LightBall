@@ -144,8 +144,12 @@ public class OrbScript : Entity {
         // super temporary collision check
         if (col.gameObject.tag == "Wall")
         {
-
-			Vector3 hit = col.contacts[0].normal;
+            float mag = vel.magnitude;
+            Vector3 n_vel = vel.normalized;
+            n_vel += new Vector3(col.GetContact(0).normal.x, col.GetContact(0).normal.y,0)*(1+Vector3.Dot(-n_vel, new Vector3(col.GetContact(0).normal.x, col.GetContact(0).normal.y, 0)));
+            n_vel = n_vel.normalized;
+            vel = n_vel * mag;
+            /*Vector3 hit = col.contacts[0].normal;
 			float angle = Vector3.Angle(hit, Vector3.up);
 
 			if (Mathf.Approximately(angle, 0) || Mathf.Approximately(angle, 180))
@@ -169,9 +173,9 @@ public class OrbScript : Entity {
 				{ // right side of the player
 					Debug.Log("Right");
 				}
-				*/
-			}
+				
+			}*/
 
-		}
+        }
     }
 }
